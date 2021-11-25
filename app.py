@@ -1,6 +1,8 @@
 import random
 from itertools import chain
 
+#Testing github!
+
 upper_str = ("ABCDEFGHIJKLMNOPQRSTUVWYXZ")
 lower_str = ("abcdefghijklmnopqrstuvwxyz")
 number_str = ("0123456789")
