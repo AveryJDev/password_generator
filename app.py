@@ -1,5 +1,6 @@
 import random
 from itertools import chain
+import csv
 
 #Testing github!
 
@@ -27,6 +28,28 @@ class Generator:
         final_password = "".join(final_list)
         return final_password
 
+def gen_logic(amount):
+    count = 0
+    while amount % 4 != 0:
+        count += 1
+        amount += 1
+
+    pass_split = amount // 4    
+    if count == 3:
+        a = 2
+        b = 1
+    elif count == 2:
+        a = 1
+        b = 1
+    elif count == 1:
+        a = 1
+        b = 0
+    else:
+        a = 0
+        b = 0
+    complete = Generator(pass_split, pass_split, pass_split-b, pass_split-a)
+    return complete
+        
 
 def auto_gen():
     while True:
@@ -39,26 +62,8 @@ def auto_gen():
             print("\nPlease enter minimum 8 characters.")
             continue
         else:
-            count = 0
-            while passwd_len % 4 != 0:
-                count += 1
-                passwd_len += 1
-
-            pass_split = passwd_len // 4    
-            if count == 3:
-                a = 2
-                b = 1
-            elif count == 2:
-                a = 1
-                b = 1
-            elif count == 1:
-                a = 1
-                b = 0
-            else:
-                a = 0
-                b = 0
-            complete = Generator(pass_split, pass_split, pass_split-b, pass_split-a)
-        print("\nYour password is: ", complete.create())
+            completed = gen_logic(passwd_len)
+        print("\nYour password is: ", completed.create())
         break
     quit()
 
@@ -93,25 +98,55 @@ def man_gen():
             complete = Generator(upper_chars, lower_chars, number_chars, special_chars)
             print("\nTotal Password Length = ", input_length)
             print("Your password is: ", complete.create())
-            quit()      
+            quit()  
 
+def bulk_gen():
+    print("\nPlease enter the following values to generate a .txt file.")
+    while True:
+        try:
+            bulk_amt = int(input("\n Amount of passwords required: "))   
+            range_choice = int(input("\n 1. Input password length\n 2. Mixed length within secure range (12 - 20)\n >>> ")) 
+            if range_choice >= 3:
+                print(" Please select 1 or 2")
+                continue
+            else:
+                if range_choice == 1:
+                    passwd_len = int(input("Enter length for passwords: "))    
+            file_name = input("\n File name to save output: ")
+        except ValueError:
+            print(" Please enter values in the requested format")
+            continue
 
+        with open (file_name, "w") as file:
+            writer = csv.writer(file)
+            for i in range(bulk_amt):
+                if range_choice == 2:
+                    passwd_len = random.randint(12, 20)
+                completed = gen_logic(passwd_len)
+                file.write(completed.create())
+                file.write("\n")
+            print(" Complete.")
+            quit()
+
+        
 def user_input():
     print("Random Password Generator. Please select auto-gen, or manual")
     while True: 
         try:
-            auto_or_manual = int(input("\n 1. Automatic Generation - Only length required\n 2. Manual Generation - Specify individual char amounts\n\n>>> "))
+            a_m_b = int(input("\n 1. Automatic Generation - Only length required\n 2. Manual Generation - Specify individual char amounts\n 3. Bulk password creation - exported to .txt file\n\n>>> "))
         except ValueError:
             print("\nIntegers only. Try again.")
             continue
-        if auto_or_manual == 1:
+        if a_m_b == 1:
             auto_gen()
             break
-        elif auto_or_manual == 2:
+        elif a_m_b == 2:
             man_gen()
             break
+        elif a_m_b == 3:
+            bulk_gen()
         else:
-            print("\nPlease select 1 or 2.")
+            print("\nPlease select 1, 2, or 3")
             continue
 
 
