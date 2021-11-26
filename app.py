@@ -65,9 +65,9 @@ def auto_gen():
 
 def man_gen():
     print("\nPlease enter your desired amount for the following (Minimum 8 in total): ")
-    input_length = 0
     while True:
         try:
+            input_length = 0
             print("\n Current Length = ", input_length)
             upper_chars = int(input(" UPPER CASE Characters: "))
             input_length += upper_chars
@@ -86,11 +86,14 @@ def man_gen():
         except ValueError:
             print("\nNumbers only, please.")
             continue
-        break
-    complete = Generator(upper_chars, lower_chars, number_chars, special_chars)
-    print("\nTotal Password Length = ", input_length)
-    print("Your password is: ", complete.create())
-    quit()
+        if input_length < 8:
+            print("You must enter at least 8 Characters!")
+            continue
+        else:
+            complete = Generator(upper_chars, lower_chars, number_chars, special_chars)
+            print("\nTotal Password Length = ", input_length)
+            print("Your password is: ", complete.create())
+            quit()      
 
 
 def user_input():
